@@ -1,5 +1,6 @@
 from NodeTree import Block
 
+
 class FileReader:
     def __init__(self, path:str):
         self.path=path

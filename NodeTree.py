@@ -45,6 +45,7 @@ class Node:
         if self.down is not None:
             self.down.printNode()
 
+
 class Block:
     def __init__(self, width, height, value):
         self.w=width
@@ -57,7 +58,7 @@ class Block:
             return str(self.w)+","+str(self.h)+","+str(self.value)
         return str(self.w) + "," + str(self.h)
 
-# root.printNode()
+
 def getValueBlocks(block_list, out_list):
     out_list.clear()
     S=0
