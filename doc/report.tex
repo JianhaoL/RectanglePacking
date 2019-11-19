@@ -58,6 +58,11 @@ Jianhao Luo
 \newpage
 \pagenumbering{arabic}
 
+% TODO consider rotations (maybe rotate before discarding)
+% TODO add proof of correctness
+% TODO show initial list of rectangles on the visualistion
+% TODO show rectangle values of the visualisation
+
 
 \section{Introduction}
 It is a common problem of trying to pack a lot of items in limited space.
@@ -78,9 +83,9 @@ without cropping, while retaining the sizes (or at least ratios).
 The \textit{bin packing problem} is an combinational optimization problem.
 According to Wikipedia\cite{wikibinpacking},
 \begin{displayquote}
-\textelp{} items of different volumes must be packed into a finite number of
+\textelp{} \textit{items of different volumes must be packed into a finite number of
 bins or containers each of a fixed given volume in a way that minimizes the
-number of bins used.
+number of bins used.}
 \end{displayquote}
 The problem has many variations,
 it arises in various places where space resources are limited and there is a
@@ -101,6 +106,8 @@ Before diving into details, let us start with a brief,
 step-by-step description of the algorithm.
 
 \begin{enumerate}
+  \item Find all permutations of the input set,
+    including all rotations.
   \item For each permutation of the input set, do the following:
   \begin{enumerate}
     \item Put the first item from the list in the top left corner,
@@ -150,88 +157,52 @@ we can pick one of the best value.
 \newpage
 \subsection{Solution pseudocode}
 \begin{lstlisting}[language=Python, caption=Python-style pseudocode]
-class Rectangle:
-    left: int
-    right: int
-    top: int
-    bottom: int
-    value: int
+# defines the rectangle we want to pack
+class Block:
+  width: int
+  height: int
+  value: int  # the price of the rectangle
+  fit: Node or None
 
-current_score: int = 0
 
+# defines the container and subcontainer
 class Node:
-    child_node[2]: Node
-    space: Rectangle  # free space rectangle
-    blockid: int
+  right: Node
+  down: Node
+  position.x: int
+  position.y: int
+  width: int
+  height: int
+  used: bool
 
-    def insert(block: Rectangle):
-      if we are not a leaf:
-          # try inserting into first child
-          new_node = child_node[0].insert(block)
-          if new_node != None:
-              return new_node
-          # else there is no room, insert into the second child
-          return child_node[1].insert(block)
-      else:
-          # if there is already a block here
-          if self.blockid != None:
-              return None
-          if block does not fit in self.space:
-              return None
-          if block fits perfectly in self.space:
-              return self
-          # otherwise, split this node and create children
-          current_score += block.value
-          self.child_node[0] = Node()
-          self.child_node[1] = Node()
+  # Node Methods:
+  fit(self, blocks):
+    for each block in the blocks:
+      # try to find a node that suits current block
+      node = self.findNode(block.w, block.h) 
+      if find a node: 
+        # pack and split the Node
+        block.fit = node.splitNode(block.w, block.h) 
 
-          # decide which way to split
-          dw = space.width - block.width
-          dh = space.height - block.height
+  findNode(self, w, h):
+    # if self is already occupied, 
+    # we look for its neighbours recursively
+    if self.used: 
+      return self.right.findNode(w, h) or self.down.findNode(w, h)
+    # if current fits then we return current Node
+    else if self.width >= w and self.height >= h: 
+      return self
+    else:
+      # Nothings fits for the block
+      return 0 
 
-          if dw > dh then:
-            child_node[0].space = (
-              space.left,
-              space.top,
-              space.left + block.width - 1,
-              space.bottom,
-            )
-            child_node[1].space = (
-              space.left + block.width,
-              space.top,
-              space.right,
-              space.bottom,
-            )
+    splitNode(self):
+      # now the node is used
+      self.used = True
+      self.right = Node(self.x+w, self.y, self.width-y, h)
+      self.down = Node(self.x, self.y+h, self.width, self.height-h)
+      return self
 
-          else:
-            child_node[0].space = (
-              space.left,
-              space.top,
-              space.right,
-              space.top + block.height - 1,
-            )
-            child_node[1].space = (
-              space.left,
-              space.top + block.height,
-              space.right,
-              space.bottom,
-            )
-
-          # insert into first child we created
-          return self.child_node[0].insert(block)
-
-def find_best(input: Rectangle[]):
-  for each permutation[i] of input:
-    root[i] = Node()
-    for each block in input:
-      # insert the next block
-      root[i].insert(block)
-    # save and reset score
-    score[i] = current_score
-    current_score = 0
-  best_score = max(score)
-  best_score_index = max_index(score)
-  return root[best_score_index], best_score
 \end{lstlisting}
 
 \subsection{Pseudocode description}
@@ -244,8 +215,24 @@ The code that calls \texttt{Node.insert} can then use the rectangle
 from the returned node to figure out where to place the block in the space,
 then update the node's \texttt{block\_id} to use as a handle for future use.
 
-\subsection{Solution correctness proof}
-% TODO
+\subsection{Time complexity calculation}
+
+\subsubsection{Finding and splitting}
+Each time it traverses to find a suitable node is  Depth First Traversal in binary search tree.
+Imagine we have N-1 blocks already packed, we want to pack the N th rectangle
+The worst case of the nodes number will be $N+1$
+So the time complexity of the worst finding is $\mathcal{O}(N)$
+To sum it up from 1 to $N$
+The time complexity will be $\mathcal{O}(N^2)$
+(we assume splitting is a constant timing consume also) 
+So the worst case of finding and spliting for $N$ blocks
+will be $\mathcal{O}(N^2)$
+
+\subsubsection{Permutations and getting values}
+For $N$ blocks we have $N!$ permutations, for each permutation the worst
+finding and splitting time complexity will be $\mathcal{O}(N^2)$
+Our project time complexity will be
+$$T_C=\mathcal{O}(N^2*N!)$$
 
 \section{Conclusion}
 Although the algorithm is quite \textit{brute-force} in some aspects,
