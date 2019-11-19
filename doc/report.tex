@@ -75,8 +75,7 @@ For example, we want to present the user their photos on the thumbnail view,
 without cropping, while retaining the sizes (or at least ratios).
 
 \section{Problem description}
-The bin packing problem,
-is an combinational optimization problem. % TODO ensure
+The \textit{bin packing problem} is an combinational optimization problem.
 According to Wikipedia\cite{wikibinpacking},
 \begin{displayquote}
 \textelp{} items of different volumes must be packed into a finite number of
@@ -95,6 +94,7 @@ We want to score as much value points as we can,
 by fitting in a fixed space as much blocks (of the best values),
 as we can.
 
+\newpage
 \section{Solution}
 \subsection{Solution description}
 Before diving into details, let us start with a brief,
@@ -147,6 +147,7 @@ If there is no such space, we discard our block and proceed to the next one.
 After calculating all packings for each permutation,
 we can pick one of the best value.
 
+\newpage
 \subsection{Solution pseudocode}
 \begin{lstlisting}[language=Python, caption=Python-style pseudocode]
 class Rectangle:
@@ -247,7 +248,10 @@ then update the node's \texttt{block\_id} to use as a handle for future use.
 % TODO
 
 \section{Conclusion}
-% TODO
+Although the algorithm is quite \textit{brute-force} in some aspects,
+which may be especially cumbersome on larger input,
+it provides very good results, aside from
+being simple and easy to understand.
 
 \newpage
 \begin{thebibliography}{9}
