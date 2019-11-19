@@ -16,7 +16,7 @@ Jianhao Luo
 \documentclass[12pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
-\graphicspath{ {images/} }
+\graphicspath{ {img/} }
 \usepackage{float}
 \usepackage{csquotes}
 \usepackage{hyperref}
@@ -128,6 +128,12 @@ We store all whitespace rectangles in a binary tree.
 We divide the remaining whitespace in order to allow recursion.
 Each smaller part can be treated as a new rectangle
 for fitting blocks from our queue.
+\begin{figure}[H]
+  \centering
+	\includegraphics[width=.5\textwidth]{split}
+  \caption{Visualisation of splitting the space and binary tree creation}
+  \label{fig:split}
+\end{figure}
 
 \subsubsection{Recursion}
 Finally, we do the same thing again for each new item to pack,
@@ -243,63 +249,10 @@ then update the node's \texttt{block\_id} to use as a handle for future use.
 \section{Conclusion}
 % TODO
 
-
-%
-%We use addresses from one of the private IPv4 address ranges (\texttt{192.168.0.0 - 192.168.255.255}). The netmask is \texttt{255.255.255.0} = 24. We wanted our addressing scheme to be as simple as possible, to make the configuration easier.\\
-%The \textit{MPLS LSRs }must have \textit{loopback }interfaces with netmask \texttt{255.255.255.255} = 32 and these interfaces must be reachable with the global IP routing table.\\
-% Scheme is as follows:
-%\begin{tabbing}
-%\textbf{R1}: \hspace{0.1cm} \= \texttt{f(0/0) 192.168.0.1} \hspace{0.5cm} \= \texttt{loopback: 10.0.0.1}\\
-%\> \texttt{f(0/1) 192.168.1.1}\\
-%\textbf{R2}: \> \texttt{f(0/0) 192.168.1.2} \> \texttt{loopback: 10.0.0.2}\\
-%\> \texttt{f(0/1) 192.168.2.2}\\
-%\textbf{R3}: \> \texttt{f(0/0) 192.168.2.3} \> \texttt{loopback: 10.0.0.3}\\
-%\> \texttt{f(0/1) 192.168.3.3}\\
-%\textbf{R4}: \> \texttt{f(0/0) 192.168.3.4} \> \texttt{loopback: 10.0.0.4}\\
-%\> \texttt{f(0/1) 192.168.4.4}\\
-%\textbf{R5}: \> \texttt{f(0/0) 192.168.4.5} \> \texttt{loopback: 10.0.0.5}\\
-%\> \texttt{f(0/1) 192.168.0.5}
-%\end{tabbing}
-%After configuration of IP addresses on all routers and interfaces, we checked the configuration using \textit{CDP}.\\
-%\texttt{show cdp neighbor} command prints information about devices connected to the router through its interfaces.\\
-
-%\begin{figure}[H]
-%  \centering
-%	\includegraphics[width=\textwidth]{3210showcdp}
-%  \caption{Output of \texttt{show cdp neighbors} on R2}
-%  \label{fig:3210}
-%\end{figure}
-%
-%\texttt{show cdp neighbour f0/0 detail} command provides us with more detailed properties of the device connected through the given interface.\\
-%
-%\subsection{Running OSPF}
-%We configured \textit{OSPF} on every router by initiating it on every router and 
-%adding interfaces to the \textit{OSPF}.
-%To ensure that everything works correctly we checked \textit{routing tables}.
-%
-%Validated our \textit{OSPF} configuration, we set the \textit{OSPF metric} for link 
-%between routers R2 and R3 to 120 in order to make it higher than the sum of metrics for links 
-%on the path from router R1 to R2 via routers R5, R4, R3 (this is to simplify the output of 
-%\texttt{traceroute} command in case of equal cost paths).\\
-%Then we verified everything via \texttt{traceroute}.
-%
-%\subsection{Configure and verify MPLS setup}
-%We enabled \textit{MPLS} and \textit{LDP} protocols on each of the routers. 
-%The following commands were used to validate and test the configuration:
-%
-%\paragraph{\texttt{show ip route <destination>}}
-%IP route for selected destination in the \textit{IP routing table}.
-
-
 \newpage
 \begin{thebibliography}{9}
-
 \bibitem{wikibinpacking}
 	\url{https://en.wikipedia.org/wiki/Bin_packing_problem}
-
-\bibitem{skiena}
-  Skiena, Steven S., \textit{The Algorithm Design Manual}, 2008 Springer-Verlag
-  London, DOI 10.1007/978-1-84800-070-4  
 \end{thebibliography}
 
 \end{document}
