@@ -228,7 +228,15 @@ def find_best(input: Rectangle[]):
 \end{lstlisting}
 
 \subsection{Pseudocode description}
-% TODO
+The \texttt{Node.insert} function traverses the tree looking for a place
+to insert the block.
+It returns the node the block can be placed into or \texttt{None} to say
+it could not fit.
+
+The code that calls \texttt{Node.insert} can then use the rectangle
+from the returned node to figure out where to place the block in the space,
+then update the node's \texttt{block\_id} to use as a handle for future use.
+
 \subsection{Solution correctness proof}
 % TODO
 
