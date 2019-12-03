@@ -66,17 +66,22 @@ class Window(QMainWindow):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.drawRect(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
         PADDING = 40
-        ipx = 0
+        ipx = PADDING
+        ipy = root_cordi[3] + PADDING
+
         for block in self.blocks:
             painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
             painter.drawRect(block[0], block[1], block[2], block[3])
         for block in self.block_list:
             painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
             ix = ipx
-            iy = root_cordi[3] + PADDING
+            iy = ipy
             iw = block[0]
             ih = block[1]
             ipx += PADDING + iw
+            if ipx > self.width:
+                ipy += root_cordi[3] + PADDING
+                ipx = PADDING
             painter.drawRect(
                 ix, iy, iw, ih,
             )
