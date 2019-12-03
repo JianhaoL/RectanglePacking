@@ -121,7 +121,8 @@ step-by-step description of the algorithm.
 \end{enumerate}
 
 \subsubsection{Permutation}
-First we permutate our input set in order to get all possible packings.
+First we permutate and rotate our input set in order to get
+all possible packings for all rotations.
 Then we can proceed to find the best fit for each permutation.
 
 \subsubsection{Placing the block}
@@ -176,7 +177,7 @@ class Node:
   used: bool
 
   # Node Methods:
-  fit(self, blocks):
+  def fit(self, blocks):
     for each block in the blocks:
       # try to find a node that suits current block
       node = self.findNode(block.w, block.h) 
@@ -184,7 +185,7 @@ class Node:
         # pack and split the Node
         block.fit = node.splitNode(block.w, block.h) 
 
-  findNode(self, w, h):
+  def findNode(self, w, h):
     # if self is already occupied, 
     # we look for its neighbours recursively
     if self.used: 
@@ -196,12 +197,46 @@ class Node:
       # Nothings fits for the block
       return 0 
 
-    splitNode(self):
-      # now the node is used
-      self.used = True
-      self.right = Node(self.x+w, self.y, self.width-y, h)
-      self.down = Node(self.x, self.y+h, self.width, self.height-h)
-      return self
+  def splitNode(self):
+    # now the node is used
+    self.used = True
+    self.right = Node(self.x+w, self.y, self.width-y, h)
+    self.down = Node(self.x, self.y+h, self.width, self.height-h)
+    return self
+
+
+def get_all_permutations(input):
+  output = []
+  rotated = get_all_rotations(input)
+  for rotated in rotations:
+    output.append(
+      itertools.permutations(rotated)  # built-in permutation function
+    )
+
+def getValueBlocks(block_list, out_list):
+    out_list.clear()
+    S=0
+    for block in block_list:
+        if not block.fit is None:
+            out_list.append((block.fit.x, block.fit.y, block.w, block.h))
+            S+=block.value
+    return S
+
+def main():
+  input = read_input_file()  # read the input file
+  permutations = get_all_permutations(input)
+  for permutation in permutations:
+    root = Node(
+      permutation[0], permutation[1], permutation[2], permutation[3]
+    )
+    root.fit(block_list_t)
+    out_list_t = []
+    value = getValueBlocks(block_list_t, out_list_t)
+    if value>value_max:
+        out_list=out_list_t
+        value_max=value
+
+  display_packing(out_list, value_max)
 
 \end{lstlisting}
 
