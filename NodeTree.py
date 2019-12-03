@@ -64,7 +64,7 @@ def getValueBlocks(block_list, out_list):
     S=0
     for block in block_list:
         if not block.fit is None:
-            out_list.append((block.fit.x, block.fit.y, block.w, block.h))
+            out_list.append((block.fit.x, block.fit.y, block.w, block.h, block.value))
             S+=block.value
     return S
 

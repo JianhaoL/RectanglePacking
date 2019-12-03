@@ -79,7 +79,7 @@ class Window(QMainWindow):
             painter.drawRect(
                 ix, iy, iw, ih,
             )
-            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, "abcdefghijklmn")
+            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[4]))
 
 
 if len(sys.argv) == 2:
