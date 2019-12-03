@@ -52,14 +52,12 @@ Jianhao Luo
 \begin{titlepage}
 \maketitle
 \vfill
-{\centering \large November 19, 2019 \par}
+{\centering \large December 3, 2019 \par}
 \pagenumbering{gobble}
 \end{titlepage}
 \newpage
 \pagenumbering{arabic}
 
-% TODO consider rotations (maybe rotate before discarding)
-% TODO add proof of correctness
 % TODO show initial list of rectangles on the visualistion
 % TODO show rectangle values of the visualisation
 
@@ -264,15 +262,28 @@ So the worst case of finding and spliting for $N$ blocks
 will be $\mathcal{O}(N^2)$
 
 \subsubsection{Permutations and getting values}
-For $N$ blocks we have $N!$ permutations, for each permutation the worst
+For $n$ blocks we have $n!$ permutations, for each permutation,
+all the combinations of the rotation of rectangles is the number of
+all subsets of $n$ rectangles, which is:
+$$
+\sum_{0 \leq k \leq n} {n \choose k} = 2^n
+$$
+
+So we have $2^n * n!$ inputs. Next, for each input the worst
 finding and splitting time complexity will be $\mathcal{O}(N^2)$
 Our project time complexity will be
-$$T_C=\mathcal{O}(N^2*N!)$$
+$$T_C=\mathcal{O}(n^2*n! * 2^n)$$
+
+\subsection{Proof of correctness}
+For any correct input we receive an output.
+We are sure that the answer is correct
+(that is, the packing is the best possible),
+because we found all possible packings and picked the best one.
 
 \section{Conclusion}
 Although the algorithm is quite \textit{brute-force} in some aspects,
 which may be especially cumbersome on larger input,
-it provides very good results, aside from
+it always provides correct results, aside from
 being simple and easy to understand.
 
 \newpage
