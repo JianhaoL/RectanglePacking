@@ -8,18 +8,18 @@ import sys
 class Node:
 
     def __init__(self, x, y, width, height):
-        self.down= None
-        self.right =None
+        self.down = None
+        self.right = None
         self.x = x
         self.y = y
-        self.width =width
-        self.height =height
+        self.width = width
+        self.height = height
         self.used = False
         self.value = 0
 
     def fit(self, blocks):
         for block in blocks:
-            node=self.findNode(block.w, block.h)
+            node = self.findNode(block.w, block.h)
             if node:
                 block.fit = node.splitNode(block.w, block.h)
 
@@ -32,11 +32,10 @@ class Node:
             return 0
 
     def splitNode(self, w, h):
-        self.used=True
-        self.right=Node(self.x+w, self.y, self.width-w, h)
-        self.down = Node(self.x, self.y+h, self.width, self.height-h)
+        self.used = True
+        self.right = Node(self.x + w, self.y, self.width - w, h)
+        self.down = Node(self.x, self.y + h, self.width, self.height - h)
         return self
-
 
     def printNode(self):
         if self.right is not None:
@@ -48,23 +47,22 @@ class Node:
 
 class Block:
     def __init__(self, width, height, value):
-        self.w=width
-        self.h=height
+        self.w = width
+        self.h = height
         self.value = value
-        self.fit=None
+        self.fit = None
 
     def __str__(self):
         if self.fit is not None:
-            return str(self.w)+","+str(self.h)+","+str(self.value)
+            return str(self.w) + "," + str(self.h) + "," + str(self.value)
         return str(self.w) + "," + str(self.h)
 
 
 def getValueBlocks(block_list, out_list):
     out_list.clear()
-    S=0
+    S = 0
     for block in block_list:
         if not block.fit is None:
             out_list.append((block.fit.x, block.fit.y, block.w, block.h, block.value))
-            S+=block.value
+            S += block.value
     return S
-
