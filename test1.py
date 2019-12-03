@@ -54,6 +54,10 @@ class Window(QMainWindow):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+        self.setAutoFillBackground(True)
+        p = self.palette()
+        p.setColor(self.backgroundRole(), Qt.darkGray)
+        self.setPalette(p)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.drawRect(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
         painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
