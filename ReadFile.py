@@ -25,6 +25,7 @@ class FileReader:
         block_list=[]
         for rec in recs:
             rec = rec.split(" ")
+            print(rec)
             rec = list(map(int, rec))
             block_list.append(rec)
         return block_list

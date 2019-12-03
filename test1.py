@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter, QBrush, QPen
 from PyQt5.QtCore import Qt
@@ -65,7 +67,6 @@ class Window(QMainWindow):
         for block in self.blocks:
             painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
             painter.drawRect(block[0], block[1], block[2], block[3])
-            print(block)
             painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
             i += PADDING
             painter.drawRect(
@@ -76,8 +77,14 @@ class Window(QMainWindow):
             )
 
 
+if len(sys.argv) == 2:
+    input_file = sys.argv[1]
+else:
+    input_file = "samples/sample1.txt"
+
+print(input_file)
 App = QApplication(sys.argv)
-fr = FileReader("Samples.txt")
+fr = FileReader(input_file)
 block_list_cordi = fr.get_block_cordi_list()
 permutations_blocks_cordi = list(itertools.permutations(block_list_cordi))
 block_list_permutations = get_block_list_from_permutations(permutations_blocks_cordi)
