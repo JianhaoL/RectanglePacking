@@ -2,13 +2,15 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter, QBrush, QPen
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect
 from NodeTree import Node
 from NodeTree import Block
 from ReadFile import FileReader
 from NodeTree import getValueBlocks
 import sys
 import itertools
+
+DEFAULT_TITLE = "Jianhao Luo, Igor Saluch"
 
 
 def get_block_list_from_permutations(permutations):
@@ -40,7 +42,7 @@ class Window(QMainWindow):
 
     def __init__(self, blocks, root):
         super().__init__()
-        self.title = "Jianhao Luo, Igor Saluch"
+        self.title = DEFAULT_TITLE
         self.top = 150
         self.left = 150
         self.width = 1800
@@ -69,12 +71,15 @@ class Window(QMainWindow):
             painter.drawRect(block[0], block[1], block[2], block[3])
             painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
             i += PADDING
+            ix = block[0] + i
+            iy = block[1] + root_cordi[0] + root_cordi[3] + i
+            iw = block[2]
+            ih = block[3]
+
             painter.drawRect(
-                block[0] + i,
-                block[1] + root_cordi[0] + root_cordi[3] + i,
-                block[2],
-                block[3],
+                ix, iy, iw, ih,
             )
+            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, "abcdefghijklmn")
 
 
 if len(sys.argv) == 2:
@@ -82,7 +87,6 @@ if len(sys.argv) == 2:
 else:
     input_file = "samples/sample1.txt"
 
-print(input_file)
 App = QApplication(sys.argv)
 fr = FileReader(input_file)
 block_list_cordi = fr.get_block_cordi_list()
@@ -91,5 +95,6 @@ block_list_permutations = get_block_list_from_permutations(permutations_blocks_c
 root_cordi = fr.get_node()
 value_max, out_list = get_max_value_permutation(root_cordi, block_list_permutations)
 window = Window(out_list, root_cordi)
+window.setWindowTitle(DEFAULT_TITLE + " SCORE:" + str(value_max))
 print(value_max)
 sys.exit(App.exec())
