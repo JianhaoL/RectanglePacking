@@ -41,8 +41,8 @@ class Window(QMainWindow):
         self.title = "Jianhao Luo, Igor Saluch"
         self.top = 150
         self.left = 150
-        self.width = 1000
-        self.height = 1000
+        self.width = 1800
+        self.height = 1500
         self.blocks = blocks
         self.root = root
         self.InitWindow()
@@ -60,9 +60,20 @@ class Window(QMainWindow):
         self.setPalette(p)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.drawRect(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
-        painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
+        PADDING = 40
+        i = 0
         for block in self.blocks:
+            painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
             painter.drawRect(block[0], block[1], block[2], block[3])
+            print(block)
+            painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
+            i += PADDING
+            painter.drawRect(
+                block[0] + i,
+                block[1] + root_cordi[0] + root_cordi[3] + i,
+                block[2],
+                block[3],
+            )
 
 
 App = QApplication(sys.argv)
