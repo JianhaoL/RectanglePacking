@@ -40,7 +40,7 @@ def get_max_value_permutation(root_cordi, block_list_permutations):
 
 class Window(QMainWindow):
 
-    def __init__(self, blocks, root):
+    def __init__(self, blocks, root, block_list):
         super().__init__()
         self.title = DEFAULT_TITLE
         self.top = 150
@@ -48,6 +48,7 @@ class Window(QMainWindow):
         self.width = 1800
         self.height = 1500
         self.blocks = blocks
+        self.block_list = block_list
         self.root = root
         self.InitWindow()
 
@@ -65,21 +66,21 @@ class Window(QMainWindow):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.drawRect(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
         PADDING = 40
-        i = 0
+        ipx = 0
         for block in self.blocks:
             painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
             painter.drawRect(block[0], block[1], block[2], block[3])
+        for block in self.block_list:
             painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
-            i += PADDING
-            ix = block[0] + i
-            iy = block[1] + root_cordi[0] + root_cordi[3] + i
-            iw = block[2]
-            ih = block[3]
-
+            ix = ipx
+            iy = root_cordi[3] + PADDING
+            iw = block[0]
+            ih = block[1]
+            ipx += PADDING + iw
             painter.drawRect(
                 ix, iy, iw, ih,
             )
-            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[4]))
+            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[2]))
 
 
 if len(sys.argv) == 2:
@@ -94,7 +95,6 @@ permutations_blocks_cordi = list(itertools.permutations(block_list_cordi))
 block_list_permutations = get_block_list_from_permutations(permutations_blocks_cordi)
 root_cordi = fr.get_node()
 value_max, out_list = get_max_value_permutation(root_cordi, block_list_permutations)
-window = Window(out_list, root_cordi)
+window = Window(out_list, root_cordi, block_list_cordi)
 window.setWindowTitle(DEFAULT_TITLE + " SCORE:" + str(value_max))
-print(value_max)
 sys.exit(App.exec())
