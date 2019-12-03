@@ -1,0 +1,10 @@
+/venv/
+/.idea/
+/doc/report.aux
+/doc/auto/report.el
+/doc/prv_report.log
+/doc/report.synctex.gz
+/doc/report.out
+/doc/report.log
+__pycache__/
+doc/report.prv/
