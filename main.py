@@ -14,6 +14,7 @@ class App(QDialog):
         self.width = 320
         self.height = 100
         self.initUI()
+        self.boolval = True
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -32,7 +33,6 @@ class App(QDialog):
         self.horizontalGroupBox1 = QGroupBox()
         self.horizontalGroupBox2 = QGroupBox()
         layout1 = QHBoxLayout()
-        layout2 = QHBoxLayout()
 
         browse_label = QLabel('Select input file')
         layout1.addWidget(browse_label)
@@ -40,16 +40,12 @@ class App(QDialog):
         browse_button.clicked.connect(self.on_click)
         layout1.addWidget(browse_button)
 
-        self.results_label = QLabel()
-        layout2.addWidget(self.results_label)
-
         self.horizontalGroupBox1.setLayout(layout1)
-        self.horizontalGroupBox2.setLayout(layout2)
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Text Files (*.txt)", options=options)
         if fileName:
             return fileName
 
@@ -58,7 +54,16 @@ class App(QDialog):
         out_list, root_cordi, block_list_cordi, result_string = result(self.openFileNameDialog())
         dialog = Window(out_list, root_cordi, block_list_cordi, self)
         dialog.show()
+
+        if self.boolval:
+            layout2 = QHBoxLayout()
+            self.results_label = QLabel()
+            layout2.addWidget(self.results_label)
+            self.horizontalGroupBox2.setLayout(layout2)
+            self.boolval = False
+
         self.results_label.setText(result_string)
+        print(result_string)
 
 
 if __name__ == '__main__':
