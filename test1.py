@@ -9,9 +9,7 @@ from ReadFile import FileReader
 from NodeTree import getValueBlocks
 import sys
 import itertools
-
-DEFAULT_TITLE = "Jianhao Luo, Igor Saluch"
-
+import time
 
 def get_block_list_from_permutations(permutations):
     block_list_permutations = []
@@ -40,9 +38,8 @@ def get_max_value_permutation(root_cordi, block_list_permutations):
 
 class Window(QMainWindow):
 
-    def __init__(self, blocks, root, block_list):
-        super().__init__()
-        self.title = DEFAULT_TITLE
+    def __init__(self, blocks, root, block_list, parent=None):
+        super(Window, self).__init__(parent)
         self.top = 150
         self.left = 150
         self.width = 1800
@@ -50,12 +47,7 @@ class Window(QMainWindow):
         self.blocks = blocks
         self.block_list = block_list
         self.root = root
-        self.InitWindow()
-
-    def InitWindow(self):
-        self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
-        self.show()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -64,10 +56,10 @@ class Window(QMainWindow):
         p.setColor(self.backgroundRole(), Qt.darkGray)
         self.setPalette(p)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-        painter.drawRect(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
+        painter.drawRect(self.root[0], self.root[1], self.root[2], self.root[3])
         PADDING = 40
         ipx = PADDING
-        ipy = root_cordi[3] + PADDING
+        ipy = self.root[3] + PADDING
 
         for block in self.blocks:
             painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
@@ -80,7 +72,7 @@ class Window(QMainWindow):
             ih = block[1]
             ipx += PADDING + iw
             if ipx > self.width:
-                ipy += root_cordi[3] + PADDING
+                ipy += self.root[3] + PADDING
                 ipx = PADDING
             painter.drawRect(
                 ix, iy, iw, ih,
@@ -88,18 +80,16 @@ class Window(QMainWindow):
             painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[2]))
 
 
-if len(sys.argv) == 2:
-    input_file = sys.argv[1]
-else:
-    input_file = "samples/sample1.txt"
+def result(input_file):
+    fr = FileReader(input_file)
+    block_list_cordi = fr.get_block_cordi_list()
+    blocks_count = len(block_list_cordi)
 
-App = QApplication(sys.argv)
-fr = FileReader(input_file)
-block_list_cordi = fr.get_block_cordi_list()
-permutations_blocks_cordi = list(itertools.permutations(block_list_cordi))
-block_list_permutations = get_block_list_from_permutations(permutations_blocks_cordi)
-root_cordi = fr.get_node()
-value_max, out_list = get_max_value_permutation(root_cordi, block_list_permutations)
-window = Window(out_list, root_cordi, block_list_cordi)
-window.setWindowTitle(DEFAULT_TITLE + " SCORE:" + str(value_max))
-sys.exit(App.exec())
+    start_time = time.time()
+    permutations_blocks_cordi = list(itertools.permutations(block_list_cordi))
+    block_list_permutations = get_block_list_from_permutations(permutations_blocks_cordi)
+    root_cordi = fr.get_node()
+    value_max, out_list = get_max_value_permutation(root_cordi, block_list_permutations)
+    time_elapsed = time.time() - start_time
+
+    return out_list, root_cordi, block_list_cordi, f'BLOCKS COUNT: {blocks_count}  TIME ELAPSED: {time_elapsed}  SCORE: {str(value_max)}'
