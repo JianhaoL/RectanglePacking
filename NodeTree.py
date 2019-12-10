@@ -15,7 +15,6 @@ class Node:
         self.width = width
         self.height = height
         self.used = False
-        self.value = 0
 
     def fit(self, blocks):
         for block in blocks:

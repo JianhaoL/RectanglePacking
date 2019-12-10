@@ -52,8 +52,8 @@ class App(QDialog):
 
     @pyqtSlot()
     def on_click(self):
-        out_list, root_cordi, block_list_cordi, result_string = result(self.openFileNameDialog())
-        dialog = Window(out_list, root_cordi, block_list_cordi, self)
+        out_list, root_cordi, block_list, result_string = result(self.openFileNameDialog())
+        dialog = Window(out_list, root_cordi, block_list, self)
         dialog.show()
 
         if self.boolval:

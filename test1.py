@@ -12,6 +12,8 @@ import sys
 import itertools
 import time
 
+
+
 def get_block_list_from_permutations(permutations):
     block_list_permutations = []
     for permutation in permutations:
@@ -26,6 +28,7 @@ def get_block_list_from_permutations(permutations):
 def get_max_value_permutation(root_cordi, block_list_permutations):
     value_max = 0
     out_list = []
+    block_list = []
     for block_list_t in block_list_permutations:
         root = Node(root_cordi[0], root_cordi[1], root_cordi[2], root_cordi[3])
         root.fit(block_list_t)
@@ -34,7 +37,8 @@ def get_max_value_permutation(root_cordi, block_list_permutations):
         if value > value_max:
             out_list = out_list_t
             value_max = value
-    return value_max, out_list
+            block_list = block_list_t
+    return value_max, out_list, block_list
 
 
 class Window(QMainWindow):
@@ -51,34 +55,40 @@ class Window(QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
 
     def paintEvent(self, event):
+        scale = 5
         painter = QPainter(self)
         self.setAutoFillBackground(True)
         p = self.palette()
         p.setColor(self.backgroundRole(), Qt.darkGray)
         self.setPalette(p)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-        painter.drawRect(self.root[0], self.root[1], self.root[2], self.root[3])
-        PADDING = 40
+        painter.drawRect(self.root[0]*scale, self.root[1]*scale, self.root[2]*scale, self.root[3]*scale)
+        PADDING = 20
         ipx = PADDING
-        ipy = self.root[3] + PADDING
+        ipy = self.root[3]*scale + PADDING
 
         for block in self.blocks:
-            painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
-            painter.drawRect(block[0], block[1], block[2], block[3])
+            painter.setPen(QPen(Qt.green, 2, Qt.SolidLine))
+            painter.drawRect(block[0]*scale, block[1]*scale, block[2]*scale, block[3]*scale)
         for block in self.block_list:
-            painter.setPen(QPen(Qt.white, 5, Qt.SolidLine))
+            painter.setPen(QPen(Qt.white, 2, Qt.SolidLine))
             ix = ipx
             iy = ipy
-            iw = block[0]
-            ih = block[1]
+            iw = block.w*scale
+            ih = block.h*scale
             ipx += PADDING + iw
-            if ipx > self.width:
-                ipy += self.root[3] + PADDING
+            if ipx > 800:
+                ipy += self.root[3]*scale + PADDING
                 ipx = PADDING
-            painter.drawRect(
-                ix, iy, iw, ih,
-            )
-            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[2]))
+            if block.fit is not None:
+                painter.fillRect(
+                    ix, iy, iw, ih, Qt.green
+                )
+            else:
+                painter.drawRect(
+                    ix, iy, iw, ih,
+                )
+            painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block.value))
 
 
 def result(input_file, benchmark_mode=-1):
@@ -94,7 +104,7 @@ def result(input_file, benchmark_mode=-1):
     permutations_blocks_cordi = list(itertools.permutations(block_list_cordi))
     block_list_permutations = get_block_list_from_permutations(permutations_blocks_cordi)
     root_cordi = fr.get_node()
-    value_max, out_list = get_max_value_permutation(root_cordi, block_list_permutations)
+    value_max, out_list, block_list = get_max_value_permutation(root_cordi, block_list_permutations)
     time_elapsed = time.time() - start_time
 
-    return out_list, root_cordi, block_list_cordi, f'BLOCKS COUNT: {blocks_count}  TIME ELAPSED: {time_elapsed}  SCORE: {str(value_max)}'
+    return out_list, root_cordi, block_list, f'BLOCKS COUNT: {blocks_count}  TIME ELAPSED: {time_elapsed}  SCORE: {str(value_max)}'
