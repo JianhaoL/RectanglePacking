@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from random import randint
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter, QBrush, QPen
@@ -80,9 +81,13 @@ class Window(QMainWindow):
             painter.drawText(QRect(ix, iy, iw, ih), Qt.AlignCenter, str(block[2]))
 
 
-def result(input_file):
+def result(input_file, benchmark_mode=-1):
     fr = FileReader(input_file)
     block_list_cordi = fr.get_block_cordi_list()
+    if benchmark_mode > 0:
+        randlist = list(itertools.permutations(block_list_cordi, benchmark_mode))
+        block_list_cordi = randlist[randint(0, len(randlist) - 1)]
+
     blocks_count = len(block_list_cordi)
 
     start_time = time.time()

@@ -52,14 +52,11 @@ Jianhao Luo
 \begin{titlepage}
 \maketitle
 \vfill
-{\centering \large December 3, 2019 \par}
+{\centering \large December 10, 2019 \par}
 \pagenumbering{gobble}
 \end{titlepage}
 \newpage
 \pagenumbering{arabic}
-
-% TODO show initial list of rectangles on the visualistion
-% TODO show rectangle values of the visualisation
 
 
 \section{Introduction}
@@ -280,9 +277,41 @@ We are sure that the answer is correct
 (that is, the packing is the best possible),
 because we found all possible packings and picked the best one.
 
+\section{Performance}
+For given number $n$ of random blocks, the algorithm was ran, with the following
+results (time in seconds):
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l | l |}
+    \hline
+$n$ & Run 1 & Run 2 & Run 3 & Run 4 & Average \\
+    \hline
+1 & 0.0001437664 & 0.00017118453 & 0.0001206398 & 0.00015187263 & 0.00014686584 \\
+2 & 0.00010704994 & 0.00021982192 & 0.00014233589 & 0.00013470649 &
+0.00015097856 \\
+3 & 0.00021576881 & 0.00032615661 & 0.00028443336 & 0.00035953521 &
+0.0002964734975 \\
+4 & 0.00120997428 & 0.00139904022 & 0.00177645683 & 0.00203728675 &
+0.00160568952 \\
+5 & 0.00701355934 & 0.00635838508 & 0.00451278686 & 0.00573587417 &
+0.0059051513625 \\
+6 & 0.0546221733 & 0.02911496162 & 0.03554892539 & 0.03390240669 & 0.03829711675 \\
+7 & 0.38526844978 & 0.20045137405 & 0.36383795738 & 0.193059206 &
+0.2856542468025 \\
+8 & 3.26617765426 & 4.76568675041 & 5.34179759025 & 4.71665024757 &
+4.5225780606225 \\
+9 & 35.0219242572 & 22.3814620971 & 20.733272314 & 22.249546051 &
+25.096551179825 \\
+    \hline
+    \end{tabular}
+\end{center}
+
+The results seem to fit with our calculations,
+the time grows very quick with linear growth of $n$.
+
 \section{Conclusion}
 Although the algorithm is quite \textit{brute-force} in some aspects,
-which may be especially cumbersome on larger input,
+which may be especially cumbersome on larger input, and causing poor performance,
 it always provides correct results, aside from
 being simple and easy to understand.
 
